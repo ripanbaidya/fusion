@@ -1,2 +1,3 @@
-# fusion
+# Fusion
+
 Lovable Clone
