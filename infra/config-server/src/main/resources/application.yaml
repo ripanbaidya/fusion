@@ -1,0 +1,83 @@
+# Note: Refer to the official documentation of Spring Cloud Config Server in case
+# you want any additional configuration or changes.
+# https://docs.spring.io/spring-cloud-config/reference/index.html
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active:
+      - dev
+
+  cloud:
+    config:
+      server:
+        git:
+          # Specifies the default branch to read configuration from.
+          # Fallback to the default branch (master) if the 'main' branch does not exist.
+          default-label: main
+          # Maximum time to wait for a response from the remote server(git).
+          # If the timeout is exceeded, the request will be aborted.
+          timeout: 10
+          # Force pulling the latest changes from the remote repository.
+          force-pull: true
+          # Clone the repository if it does not exist locally.
+          clone-on-start: true
+          # Interval between two refreshes of the remote repository.
+          # Default value 0 which means there is no period refresh (Only fetch on demand).
+          refresh-rate: 30
+          search-paths:
+            # Global configuration directory. like - application.yml
+            - "."
+            # Search configuration file inside the "services" directory. like - services/app/application.yml
+            - "services/{application}"
+            - "infra/{application}"
+
+# Management & Health check related configurations.
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        # Enable liveness and readiness probes for Kubernetes.
+        enabled: true
+    shutdown:
+      access: unrestricted
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  # Enable the info endpoint to expose environment information.
+  # /actuator/info
+  info:
+    env:
+      enabled: true
+  # Enable the metrics endpoint to expose metrics information.
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+# Enable encryption and decryption of sensitive properties stored in the GitHub repository.
+# Encrypt secrets (passwords, tokens, API keys) at rest and decrypt them when served to client applications.
+encrypt:
+  key: {ENCRYPT_KEY}
+
+server:
+  # 8888 is the default port for the config server.
+  # If you want to use a different port, you can change it here.
+  port: 8888
+
+info:
+  app:
+    name: "Fusion ConfigServer"
+    description: "Centralized configuration server for all microservices."
+    version: "1.0.0"

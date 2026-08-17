@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          # The URI of the remote repository containing the Spring Cloud Config server's properties files
+          uri: https://github.com/ripanbaidya/fusion-config.git
