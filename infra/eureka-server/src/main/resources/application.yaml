@@ -1,0 +1,79 @@
+spring:
+  application:
+    name: eureka-server
+  profiles:
+    active:
+      - dev
+
+eureka:
+  instance:
+    hostname: localhost
+    # Client sends heartbeat in every 10 seconds.
+    lease-renewal-interval-in-seconds: 10
+    # Mark dead instances after 20 seconds (default is 90).
+    lease-expiration-duration-in-seconds: 20
+  # The application is the Eureka Server, so it must not behave like a discovery client.
+
+  client:
+    # It will not register itself as a client/service.
+    # and It will not pull the registry from a peer.
+    # Note: Enable both only when running Eureka in a clustered/peer-aware setup.
+    fetch-registry: false
+    register-with-eureka: false
+
+    # The URL other microservices (and this server, if clustered) use to reach the registry.
+    # Built from the instance hostname and the server port so it stays consistent across environments.
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+  server:
+    # How often Eureka scans for and evicts instances that stopped sending heartbeats.
+    # 5000 ms is aggressive and suitable for local development to get fast feedback;
+    # production values are typically higher (default is 60000 ms) to avoid evicting healthy
+    # instances during transient network issues.
+    eviction-interval-timer-in-ms: 5000
+    enable-self-preservation: true
+
+# Management & Health check related configurations.
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        # Enable liveness and readiness probes for Kubernetes.
+        enabled: true
+    shutdown:
+      access: unrestricted
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  # Enable the info endpoint to expose environment information.
+  # /actuator/info
+  info:
+    env:
+      enabled: true
+  # Enable the metrics endpoint to expose metrics information.
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+server:
+  # 8761 is the default port for the Eureka Server.
+  # If you want to use a different port, you can change it here.
+  port: 8761
+
+info:
+  app:
+    name: "Fusion EurekaServer"
+    description: "Eureka-based Service Discovery Server: microservices register here and resolve each other by service name instead of host/port."
+    version: "1.0.0"
