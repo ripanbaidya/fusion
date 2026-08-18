@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fusion AI — Coming Soon</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #050505;
+            --text: #f5f5f5;
+            --muted: #858585;
+            --border: #1d1d1d;
+            --accent: #ffffff;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Inter", sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Background */
+
+        .background {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .background::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+
+            background-size: 70px 70px;
+
+            mask-image: radial-gradient(
+                    ellipse at center,
+                    black 20%,
+                    transparent 75%
+            );
+        }
+
+        .glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.08;
+        }
+
+        .glow-1 {
+            background: white;
+            top: -250px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .glow-2 {
+            background: #777;
+            bottom: -300px;
+            right: -150px;
+        }
+
+        /* Main */
+
+        .container {
+            width: min(1100px, calc(100% - 48px));
+            min-height: 100vh;
+            margin: auto;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+
+        nav {
+            height: 90px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-mark {
+            width: 32px;
+            height: 32px;
+
+            display: grid;
+            place-items: center;
+
+            border: 1px solid #333;
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: 800;
+
+            background: #111;
+        }
+
+        .accent {
+            color: #999;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: #777;
+            font-size: 12px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #aaa;
+
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
+            animation: pulse 2s infinite;
+        }
+
+        /* Hero */
+
+        .hero {
+            flex: 1;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 100px 0;
+        }
+
+        /* Heading */
+
+        h1 {
+            max-width: 850px;
+
+            font-size: clamp(52px, 8vw, 100px);
+            line-height: 0.95;
+            letter-spacing: -6px;
+            font-weight: 800;
+        }
+
+        h1 span {
+            display: block;
+
+            color: transparent;
+
+            background: linear-gradient(
+                    180deg,
+                    #ffffff 0%,
+                    #555555 100%
+            );
+
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        /* Description */
+
+        .description {
+            max-width: 520px;
+
+            margin-top: 30px;
+
+            color: var(--muted);
+
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        /* Coming Soon */
+
+        .coming-soon {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            margin-top: 45px;
+
+            color: #aaa;
+
+            font-size: 10px;
+            font-weight: 600;
+
+            letter-spacing: 4px;
+        }
+
+        /* Footer */
+
+        footer {
+            height: 75px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-top: 1px solid var(--border);
+
+            color: #555;
+
+            font-size: 11px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #555;
+            text-decoration: none;
+
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Animations */
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.4;
+                transform: scale(0.9);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+
+            100% {
+                opacity: 0.4;
+                transform: scale(0.9);
+            }
+        }
+
+        /* Responsive */
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: min(100% - 32px, 1100px);
+            }
+
+            nav {
+                height: 75px;
+            }
+
+            .status {
+                display: none;
+            }
+
+            .hero {
+                padding: 70px 0;
+            }
+
+            h1 {
+                font-size: clamp(48px, 15vw, 75px);
+                letter-spacing: -4px;
+            }
+
+            .description {
+                font-size: 14px;
+                padding: 0 15px;
+            }
+
+            footer {
+                height: 65px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="background">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+</div>
+
+<main class="container">
+
+    <nav>
+        <div class="logo">
+            <span>Fusion<span class="accent">AI</span></span>
+        </div>
+
+        <div class="status">
+            <span class="status-dot"></span>
+            Building the next Service
+        </div>
+    </nav>
+
+    <section class="hero">
+
+        <h1>
+            Intelligence, <span>Unified.</span>
+        </h1>
+
+        <p class="description">
+            Fusion AI brings powerful artificial intelligence into one simple, intelligent experience.
+        </p>
+
+        <div class="coming-soon">
+            <span>COMING SOON.</span>
+        </div>
+
+    </section>
+
+    <footer>
+        <span>© 2026 Fusion AI</span>
+
+        <div class="footer-links">
+            <a href="https://x.com">X</a>
+            <a href="https://github.com/">GitHub</a>
+            <a href="https://linkedin.com/">LinkedIn</a>
+        </div>
+    </footer>
+
+</main>
+
+<script>
+</script>
+</body>
+</html>
